@@ -86,7 +86,7 @@ local function list_update(w, buttons, label, data, objects)
       -- All of this is added in a fixed widget
       l:fill_space(true)
       l:add(ibm)
-      l:add(tbm)
+      --l:add(tbm)
       ll:add(l)
       ll:add(cbm)
 
@@ -130,8 +130,9 @@ local function list_update(w, buttons, label, data, objects)
       else
         tt:remove_from_object(tb)
       end
+      tb:set_markup_silently(text)
       if not tb:set_markup_silently(text) then
-        tb:set_markup('<i>&lt;Invalid text&gt;</i>')
+        tb:set_markup('<i>Invalid text</i>')
       end
     end
     bgb:set_bg(bg)

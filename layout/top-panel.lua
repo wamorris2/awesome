@@ -3,6 +3,8 @@ local beautiful = require('beautiful')
 local wibox = require('wibox')
 local TaskList = require('widget.task-list')
 local TagList = require('widget.tag-list')
+local memory = require('widget.ram.ram-meter')
+local cpu = require('widget.cpu.cpu-meter')
 local gears = require('gears')
 local clickable_container = require('widget.material.clickable-container')
 local mat_icon_button = require('widget.material.icon-button')
@@ -15,8 +17,8 @@ local systray = wibox.widget.systray()
   systray:set_horizontal(true)
   systray:set_base_size(20)
   systray.forced_height = 20
-
-  -- Clock / Calendar 24h format
+  
+-- Clock / Calendar 24h format
 -- local textclock = wibox.widget.textclock('<span font="Roboto Mono bold 9">%d.%m.%Y\n     %H:%M</span>')
 -- Clock / Calendar 12AM/PM fornat
 local textclock = wibox.widget.textclock('<span font="Roboto Mono 12">%I:%M %p</span>')

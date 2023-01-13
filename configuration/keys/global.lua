@@ -12,23 +12,37 @@ local globalKeys =
   -- Hotkeys
   awful.key({modkey}, 'F1', hotkeys_popup.show_help, {description = 'Show help', group = 'awesome'}),
   -- Tag browsing
-  awful.key({modkey}, 'w', awful.tag.viewprev, {description = 'view previous', group = 'tag'}),
-  awful.key({modkey}, 's', awful.tag.viewnext, {description = 'view next', group = 'tag'}),
-  awful.key({altkey, 'Control'}, 'Up', awful.tag.viewprev, {description = 'view previous', group = 'tag'}),
-  awful.key({altkey, 'Control'}, 'Down', awful.tag.viewnext, {description = 'view next', group = 'tag'}),
+  awful.key({modkey}, 'Left', awful.tag.viewprev, {description = 'view previous', group = 'tag'}),
+  awful.key({modkey}, 'Right', awful.tag.viewnext, {description = 'view next', group = 'tag'}),
+  awful.key({modkey}, 'a', awful.tag.viewprev, {description = 'view previous', group = 'tag'}),
+  awful.key({modkey}, 'd', awful.tag.viewnext, {description = 'view next', group = 'tag'}),
+  awful.key({modkey, 'Shift'}, 'Tab', awful.tag.viewprev, {description = 'view previous', group = 'tag'}),
+  awful.key({modkey}, 'Tab', awful.tag.viewnext, {description = 'view next', group = 'tag'}),
   awful.key({modkey}, 'Escape', awful.tag.history.restore, {description = 'go back', group = 'tag'}),
   -- Default client focus
+  awful.key({altkey}, 'd',
+    function()
+      awful.client.focus.byidx(1)
+    end,
+    {description = 'Focus next by index', group = 'client'}
+  ),
+  awful.key({altkey},'a',
+    function()
+      awful.client.focus.byidx(-1)
+    end,
+    {description = 'Focus previous by index', group = 'client'}
+  ),
   awful.key(
-    {modkey},
-    'd',
+    {altkey},    
+    'Tab',
     function()
       awful.client.focus.byidx(1)
     end,
     {description = 'Focus next by index', group = 'client'}
   ),
   awful.key(
-    {modkey},
-    'a',
+    {altkey, 'Shift'},
+    'Tab',
     function()
       awful.client.focus.byidx(-1)
     end,
@@ -43,13 +57,14 @@ local globalKeys =
     {description = 'Main menu', group = 'awesome'}
   ),
   awful.key(
-    {altkey},
-    'space',
+    {modkey},
+    'w',
     function()
-      awful.spawn('rofi -combi-modi window,drun -show combi -modi combi')
+      local screen = awful.screen.focused()
+      screen.top_panel.visible = not screen.top_panel.visible
     end,
-    {description = 'Show main menu', group = 'awesome'}
-  ),
+    {description = 'toggle wibox', group = 'awesome'}
+    ),
   awful.key(
     {modkey, 'Shift'},
     'r',
@@ -75,30 +90,34 @@ local globalKeys =
     {description = 'Log Out Screen', group = 'awesome'}
   ),
   awful.key({modkey}, 'u', awful.client.urgent.jumpto, {description = 'jump to urgent client', group = 'client'}),
-  awful.key(
-    {altkey},
-    'Tab',
+  awful.key({ modkey, "Control"   }, "j", function () awful.client.swap.byidx(  1)    end,
+            {description = "swap with next client by index", group = "client"}),
+  awful.key({ modkey, "Control"   }, "k", function () awful.client.swap.byidx( -1)    end,
+            {description = "swap with previous client by index", group = "client"}),
+  awful.key({ 'Control', modkey }, "Down",
     function()
-      --awful.client.focus.history.previous()
-      awful.client.focus.byidx(1)
-      if _G.client.focus then
-        _G.client.focus:raise()
-      end
+      awful.client.focus.global_bydirection("down")
+        if client.focus then client.focus:raise() end
     end,
-    {description = 'Switch to next window', group = 'client'}
-  ),
-  awful.key(
-    {altkey, 'Shift'},
-    'Tab',
+  {description = "focus down", group = "client"}),
+  awful.key({ 'Control', modkey }, "Up",
     function()
-      --awful.client.focus.history.previous()
-      awful.client.focus.byidx(-1)
-      if _G.client.focus then
-        _G.client.focus:raise()
-      end
+      awful.client.focus.global_bydirection("up")
+        if client.focus then client.focus:raise() end
     end,
-    {description = 'Switch to previous window', group = 'client'}
-  ),
+  {description = "focus up", group = "client"}),
+  awful.key({ 'Control', modkey }, "Left",
+    function()
+      awful.client.focus.global_bydirection("left")
+        if client.focus then client.focus:raise() end
+    end,
+  {description = "focus left", group = "client"}),
+  awful.key({ 'Control', modkey }, "Right",
+    function()
+      awful.client.focus.global_bydirection("right")
+        if client.focus then client.focus:raise() end
+    end,
+  {description = "focus right", group = "client"}),
   -- Programms
   awful.key(
     {modkey},
@@ -161,7 +180,7 @@ local globalKeys =
   awful.key({modkey, 'Control'}, 'q', _G.awesome.quit, {description = 'quit awesome', group = 'awesome'}),
   awful.key(
     {altkey, 'Shift'},
-    'Right',
+    'l',
     function()
       awful.tag.incmwfact(0.05)
     end,
@@ -169,7 +188,7 @@ local globalKeys =
   ),
   awful.key(
     {altkey, 'Shift'},
-    'Left',
+    'h',
     function()
       awful.tag.incmwfact(-0.05)
     end,
@@ -177,7 +196,7 @@ local globalKeys =
   ),
   awful.key(
     {altkey, 'Shift'},
-    'Down',
+    'j',
     function()
       awful.client.incwfact(0.05)
     end,
@@ -185,23 +204,23 @@ local globalKeys =
   ),
   awful.key(
     {altkey, 'Shift'},
-    'Up',
+    'k',
     function()
       awful.client.incwfact(-0.05)
     end,
     {description = 'Increase master height factor', group = 'layout'}
   ),
   awful.key(
-    {modkey, 'Shift'},
-    'Left',
+    {altkey, 'Control'},
+    'h',
     function()
       awful.tag.incnmaster(1, nil, true)
     end,
     {description = 'Increase the number of master clients', group = 'layout'}
   ),
   awful.key(
-    {modkey, 'Shift'},
-    'Right',
+    {altkey, 'Control'},
+    'l',
     function()
       awful.tag.incnmaster(-1, nil, true)
     end,
@@ -209,7 +228,7 @@ local globalKeys =
   ),
   awful.key(
     {modkey, 'Control'},
-    'Left',
+    'h',
     function()
       awful.tag.incncol(1, nil, true)
     end,
@@ -217,7 +236,7 @@ local globalKeys =
   ),
   awful.key(
     {modkey, 'Control'},
-    'Right',
+    'l',
     function()
       awful.tag.incncol(-1, nil, true)
     end,
@@ -231,27 +250,47 @@ local globalKeys =
     end,
     {description = 'Select next', group = 'layout'}
   ),
-  awful.key(
-    {modkey, 'Shift'},
-    'space',
-    function()
-      awful.layout.inc(-1)
-    end,
-    {description = 'Select previous', group = 'layout'}
+awful.key({modkey, 'Shift'}, 'space',
+  function()
+    awful.layout.inc(-1)
+  end,
+  {description = 'Select previous', group = 'layout'}
+),
+awful.key({modkey, 'Control'}, 'n',
+  function()
+    local c = awful.client.restore()
+    -- Focus restored client
+    if c then
+      _G.client.focus = c
+      c:raise()
+    end
+  end,
+  {description = 'restore minimized', group = 'client'}
   ),
-  awful.key(
-    {modkey, 'Control'},
-    'n',
-    function()
-      local c = awful.client.restore()
-      -- Focus restored client
-      if c then
-        _G.client.focus = c
-        c:raise()
-      end
-    end,
-    {description = 'restore minimized', group = 'client'}
-  ),
+awful.key(
+  {modkey, "Shift"}, "Left",
+  function ()
+    local t = client.focus and client.focus.first_tag or nil
+    if t == nil then
+      return
+    end
+    local tag = client.focus.screen.tags[(t.index - 2) % #client.focus.screen.tags + 1]
+    awful.client.movetotag(tag)
+    awful.tag.viewprev()
+  end,
+  {description = 'Move client to previous tag and switch to it', group = 'tag'}),
+awful.key(
+  {modkey, "Shift"}, "Right",
+  function ()
+    local t = client.focus and client.focus.first_tag or nil
+    if t == nil then
+      return
+    end
+    local tag = client.focus.screen.tags[(t.index + #client.focus.screen.tags) % #client.focus.screen.tags + 1]
+    awful.client.movetotag(tag)
+    awful.tag.viewnext()
+  end,
+  {description = 'Move client to next tag and switch to it', group = 'tag'}),  
   -- Dropdown application
   awful.key(
     {modkey},
@@ -410,7 +449,7 @@ local globalKeys =
     function()
       awful.util.spawn(apps.default.files)
     end,
-    {description = 'filebrowser', group = 'hotkeys'}
+    {description = 'filebrowser', group = 'launcher'}
   ),
   -- Emoji Picker
   awful.key(

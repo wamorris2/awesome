@@ -8,23 +8,24 @@ local rofi_command = 'env /usr/bin/rofi -dpi ' .. get_dpi() .. ' -width ' .. wit
 return {
   -- List of apps to start by default on some actions
   default = {
-    terminal = 'terminator',
+    terminal = 'alacritty',
     rofi = rofi_command,
     lock = 'i3lock-fancy',
     quake = 'terminator',
     screenshot = 'flameshot screen -p ~/Pictures',
     region_screenshot = 'flameshot gui -p ~/Pictures',
     delayed_screenshot = 'flameshot screen -p ~/Pictures -d 5000',
-    browser = 'brave',
-    editor = 'gedit', -- gui text editor
+    browser = 'firefox',
+    editor = 'subl', -- gui text editor
     social = 'discord',
     game = rofi_command,
-    files = 'nautilus',
+    files = 'thunar',
     music = rofi_command 
   },
   -- List of apps to start once on start-up
   run_on_start_up = {
-    'picom --config ' .. filesystem.get_configuration_dir() .. '/configuration/picom.conf',
+    'nitrogen --restore',
+    'picom --config /home/wamorris/.config/picom.conf',
     'nm-applet --indicator', -- wifi
     'pnmixer', -- shows an audiocontrol applet in systray when installed.
     --'blueberry-tray', -- Bluetooth tray icon
