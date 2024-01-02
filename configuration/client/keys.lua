@@ -1,4 +1,5 @@
 local awful = require('awful')
+local cyclefocus = require('cyclefocus')
 require('awful.autofocus')
 local modkey = require('configuration.keys.mod').modKey
 local altkey = require('configuration.keys.mod').altKey
@@ -31,7 +32,16 @@ local clientKeys =
       c:kill()
     end,
     {description = 'close', group = 'client'}
-  )
+  ),
+  cyclefocus.key({altkey}, "Tab", {
+    -- cycle_filters as a function callback:
+    -- cycle_filters = { function (c, source_c) return c.screen == source_c.screen end },
+
+    -- cycle_filters from the default filters:
+    cycle_filters = { cyclefocus.filters.same_screen, cyclefocus.filters.common_tag },
+    keys = {'Tab', 'ISO_Left_Tab'},  -- default, could be left out
+    move_mouse_pointer = false
+  })
 )
 
 return clientKeys

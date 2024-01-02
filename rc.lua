@@ -10,6 +10,7 @@ beautiful.init(require('theme'))
 
 -- Layout
 require('layout')
+require('awedecons')
 
 -- Init all modules
 require('module.notifications')

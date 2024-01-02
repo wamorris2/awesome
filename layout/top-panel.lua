@@ -5,6 +5,7 @@ local TaskList = require('widget.task-list')
 local TagList = require('widget.tag-list')
 local memory = require('widget.ram.ram-meter')
 local cpu = require('widget.cpu.cpu-meter')
+local pamac = require('widget.package-updater')
 local gears = require('gears')
 local clickable_container = require('widget.material.clickable-container')
 local mat_icon_button = require('widget.material.icon-button')
@@ -133,6 +134,7 @@ local TopPanel = function(s)
         layout = wibox.layout.fixed.horizontal,
         wibox.container.margin(systray, dpi(3), dpi(3), dpi(6), dpi(3)),
         -- Layout box
+        pamac,
         LayoutBox(s),
         -- Clock
         clock_widget,

@@ -8,7 +8,7 @@ local tags = {
     icon = icons.chrome,
     type = 'chrome',
     defaultApp = apps.default.browser,
-    defaultLayout = 2,
+    defaultLayout = 3,
     screen = 1
   },
   {

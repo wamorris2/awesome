@@ -34,7 +34,7 @@ return {
     'xfce4-power-manager', -- Power manager
      'flameshot',
      'synology-drive -minimized',
-     'steam -silent',
+     -- 'steam -silent',
     'feh --randomize --bg-fill ~/.wallpapers/*',
     '/usr/bin/variety',
     -- Add applications that need to be killed between reloads

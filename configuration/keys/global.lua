@@ -1,6 +1,10 @@
 local awful = require('awful')
+--local alttab = require('alttab')
 require('awful.autofocus')
 local beautiful = require('beautiful')
+local get_dpi = beautiful.xresources.get_dpi
+local with_dpi = beautiful.xresources.apply_dpi
+local filesystem = require('gears.filesystem')
 local hotkeys_popup = require('awful.hotkeys_popup').widget
 
 local modkey = require('configuration.keys.mod').modKey
@@ -32,7 +36,7 @@ local globalKeys =
     end,
     {description = 'Focus previous by index', group = 'client'}
   ),
-  awful.key(
+  --[[awful.key(
     {altkey},    
     'Tab',
     function()
@@ -47,12 +51,13 @@ local globalKeys =
       awful.client.focus.byidx(-1)
     end,
     {description = 'Focus previous by index', group = 'client'}
-  ),
+  ),--]]
   awful.key(
     {modkey},
     'r',
     function()
-      awful.spawn('rofi -combi-modi window,drun -show combi -modi combi')
+      awful.spawn('env /usr/bin/rofi -dpi ' .. get_dpi() .. ' -width ' .. with_dpi(400) .. ' -show drun -theme ' .. filesystem.get_configuration_dir() .. '/configuration/rofi.rasi -run-command "/bin/bash -c -i \'shopt -s expand_aliases; {cmd}\'"')
+      --awful.spawn('rofi -combi-modi window,drun -show combi -modi combi')
     end,
     {description = 'Main menu', group = 'awesome'}
   ),
@@ -90,10 +95,10 @@ local globalKeys =
     {description = 'Log Out Screen', group = 'awesome'}
   ),
   awful.key({modkey}, 'u', awful.client.urgent.jumpto, {description = 'jump to urgent client', group = 'client'}),
-  awful.key({ modkey, "Control"   }, "j", function () awful.client.swap.byidx(  1)    end,
-            {description = "swap with next client by index", group = "client"}),
-  awful.key({ modkey, "Control"   }, "k", function () awful.client.swap.byidx( -1)    end,
-            {description = "swap with previous client by index", group = "client"}),
+  awful.key({ modkey, "Control"   }, "j", function () awful.screen.focus_relative(1)   end,
+            {description = "focus the next screen", group = "client"}),
+  awful.key({ modkey, "Control"   }, "k", function () awful.screen.focus_relative(-1)    end,
+            {description = "focus the previous screen", group = "client"}),
   awful.key({ 'Control', modkey }, "Down",
     function()
       awful.client.focus.global_bydirection("down")
@@ -428,7 +433,7 @@ awful.key(
   ),
   -- System Monitor hotkey
   awful.key(
-    {modkey},
+    {altkey},
     'm',
     function()
       awful.util.spawn_with_shell('mate-system-monitor')
